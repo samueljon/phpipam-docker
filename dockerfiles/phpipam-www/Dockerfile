@@ -1,6 +1,6 @@
 # phpIPAM Apache container 
 
-FROM phpipam/phpipam-base:latest
+FROM samueljon/phpipam-base:latest
 
 ARG BUILD_DATE
 ARG VCS_REF
@@ -21,10 +21,11 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
 WORKDIR /
 
 # Download phpIPAM
+RUN sed -i 's/Listen 80/Listen 8080/' /etc/apache2/httpd.conf
 RUN /install_phpipam $BRANCH $VCS_REF
 
 # Run Apache
-EXPOSE 80
+EXPOSE 8080
 
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD /start_apache2
